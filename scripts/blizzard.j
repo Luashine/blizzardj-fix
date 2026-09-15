@@ -2456,6 +2456,8 @@ function ToggleHeroGlowOnAllUnitsBJ takes boolean allow returns nothing
         exitwhen index == bj_MAX_PLAYER_SLOTS
     endloop
     call DestroyGroup(g)
+
+	set g = null
 endfunction
 
 //===========================================================================
@@ -3061,6 +3063,8 @@ function DestroyEffectAsyncBJ takes nothing returns nothing
 	
 	call TriggerSleepAction(localTime)
 	call DestroyEffect(localEffect)
+
+	set localEffect = null
 endfunction
 
 function DestroyEffectAfterTimeBJ takes effect whichEffect, real time returns nothing
@@ -3503,12 +3507,16 @@ function GetInventoryBagIndexOfItemTypeBJ takes unit whichUnit, integer itemId r
     loop
         set indexItem = UnitItemInBagSlot(whichUnit, index)
         if (indexItem != null) and (GetItemTypeId(indexItem) == itemId) then
+
+			set indexItem = null
             return index + 1
         endif
 
         set index = index + 1
         exitwhen index >= bj_MAX_EXTENDED_INVENTORY
     endloop
+	
+	set indexItem = null
     return 0
 endfunction
 
@@ -3537,12 +3545,16 @@ function GetInventoryBagIndexOfEquipmentTypeBJ takes unit whichUnit, equipmentTy
     loop
         set indexItem = UnitItemInBagSlot(whichUnit, index)
         if (indexItem != null) and (GetItemEquipmentType(indexItem) == whichEquipmentType) then
+
+			set indexItem = null
             return index + 1
         endif
 
         set index = index + 1
         exitwhen index >= bj_MAX_EXTENDED_INVENTORY
     endloop
+	
+	set indexItem = null
     return 0
 endfunction
 
@@ -3566,12 +3578,16 @@ function GetEquipmentInventoryIndexOfItemTypeBJ takes unit whichUnit, integer it
     loop
         set indexItem = UnitItemInEquipmentSlot(whichUnit, ConvertLoadoutSlot(index))
         if (indexItem != null) and (GetItemTypeId(indexItem) == itemId) then
+
+			set indexItem = null
             return index + 1
         endif
 
         set index = index + 1
         exitwhen index >= bj_MAX_EQUIPMENT_INVENTORY
     endloop
+	
+	set indexItem = null
     return 0
 endfunction
 
@@ -3584,12 +3600,16 @@ function GetEquipmentInventoryIndexOfEquipmentTypeBJ takes unit whichUnit, equip
     loop
         set indexItem = UnitItemInEquipmentSlot(whichUnit, ConvertLoadoutSlot(index))
         if (indexItem != null) and (GetItemEquipmentType(indexItem) == whichEquipmentType) then
+
+			set indexItem = null
             return index + 1
         endif
 
         set index = index + 1
         exitwhen index >= bj_MAX_EQUIPMENT_INVENTORY
     endloop
+
+	set indexItem = null
     return 0
 endfunction
 
@@ -4476,6 +4496,8 @@ function BlzAllUnitsEnableAurasBJ takes boolean enable, boolean affectsUI return
         exitwhen index == bj_MAX_PLAYER_SLOTS
     endloop
     call DestroyGroup(g)
+
+	set g = null
 endfunction
 
 //===========================================================================
