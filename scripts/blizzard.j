@@ -1907,7 +1907,7 @@ function TriggerRegisterEnterRectSimple_sub takes region rectRegion, trigger tri
 endfunction
 
 function TriggerRegisterEnterRectSimple takes trigger trig, rect r returns event
-    return TriggerRegisterEnterRectSimple_sub(CreateRegion(), trig, rectRegion, null)
+    return TriggerRegisterEnterRectSimple_sub(CreateRegion(), trig, r)
 endfunction
 
 //===========================================================================
@@ -1917,7 +1917,7 @@ function TriggerRegisterLeaveRectSimple_sub takes region rectRegion, trigger tri
 endfunction
 
 function TriggerRegisterLeaveRectSimple takes trigger trig, rect r returns event
-    return TriggerRegisterLeaveRectSimple_sub(CreateRegion(), trig, rectRegion, null)
+    return TriggerRegisterLeaveRectSimple_sub(CreateRegion(), trig, r)
 endfunction
 
 //===========================================================================
@@ -5510,7 +5510,7 @@ function GetPlayersAllies_sub takes force f, player whichPlayer returns force
 endfunction
 
 function GetPlayersAllies takes player whichPlayer returns force
-    return GetPlayersAllies_sub(CreateForce())
+    return GetPlayersAllies_sub(CreateForce(), whichPlayer)
 endfunction
 
 //===========================================================================
