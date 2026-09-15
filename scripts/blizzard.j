@@ -4587,9 +4587,8 @@ endfunction
 // This attempts to replace a unit with a new unit type by creating a new
 // unit of the desired type using the old unit's location, facing, etc.
 //
-function ReplaceUnitBJ takes unit whichUnit, integer newUnitId, integer unitStateMethod returns unit
-    local unit    oldUnit = whichUnit // TODO leak? because its in a parameter
-    local unit    newUnit // TODO leak? because its also stored in global
+function ReplaceUnitBJ_sub takes unit whichUnit, integer newUnitId, integer unitStateMethod, unit newUnit returns unit
+    local unit    oldUnit = whichUnit
     local boolean wasHidden
     local integer index
     local item    indexItem
@@ -4598,7 +4597,7 @@ function ReplaceUnitBJ takes unit whichUnit, integer newUnitId, integer unitStat
     // If we have bogus data, don't attempt the replace.
     if (oldUnit == null) then
         set bj_lastReplacedUnit = oldUnit
-        return oldUnit
+        return null
     endif
 
     // Hide the original unit.
@@ -4673,8 +4672,13 @@ function ReplaceUnitBJ takes unit whichUnit, integer newUnitId, integer unitStat
         call RemoveUnit(oldUnit)
     endif
 
+	set oldUnit = null
     set bj_lastReplacedUnit = newUnit
     return newUnit
+endfunction
+
+function ReplaceUnitBJ takes unit whichUnit, integer newUnitId, integer unitStateMethod returns unit
+    return ReplaceUnitBJ_sub(whichUnit, newUnitId, unitStateMethod, null)
 endfunction
 
 //===========================================================================
