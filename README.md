@@ -9,6 +9,16 @@ Licence: I don't watch TV but must pay for it.
 ...Whatever license I decide upon later (if I need to) shall retroactively
 apply to my earlier changes (patches) here.
 
+## Explanation
+
+> In Jass you must set local variables that hold agents (or any child type) to `null`
+at the end of functions to avoid reference counter leaks.
+
+Further reading:
+
+1. <https://github.com/lep/jassdoc/pull/108>
+2. <https://www.hiveworkshop.com/threads/jass-contest-how-would-you-avoid-local-variable-leaks.374040/>
+
 ## Ignored files
 
 ```
