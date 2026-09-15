@@ -6,6 +6,8 @@ Source: original files + paths
 
 Licence: I don't watch TV but must pay for it.
 
+...Whatever license I decide upon later (if I need to) shall retroactively
+apply to my earlier changes (patches) here.
 
 ## Ignored files
 
