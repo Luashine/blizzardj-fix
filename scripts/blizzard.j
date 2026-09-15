@@ -1901,17 +1901,23 @@ function TriggerRegisterLeaveRegionSimple takes trigger trig, region whichRegion
 endfunction
 
 //===========================================================================
-function TriggerRegisterEnterRectSimple takes trigger trig, rect r returns event
-    local region rectRegion = CreateRegion() // leak refcount
+function TriggerRegisterEnterRectSimple_sub takes region rectRegion, trigger trig, rect r returns event
     call RegionAddRect(rectRegion, r)
     return TriggerRegisterEnterRegion(trig, rectRegion, null)
 endfunction
 
+function TriggerRegisterEnterRectSimple takes trigger trig, rect r returns event
+    return TriggerRegisterEnterRectSimple_sub(CreateRegion(), trig, rectRegion, null)
+endfunction
+
 //===========================================================================
-function TriggerRegisterLeaveRectSimple takes trigger trig, rect r returns event
-    local region rectRegion = CreateRegion() // leak refcount
+function TriggerRegisterLeaveRectSimple_sub takes region rectRegion, trigger trig, rect r returns event
     call RegionAddRect(rectRegion, r)
     return TriggerRegisterLeaveRegion(trig, rectRegion, null)
+endfunction
+
+function TriggerRegisterLeaveRectSimple takes trigger trig, rect r returns event
+    return TriggerRegisterLeaveRectSimple_sub(CreateRegion(), trig, rectRegion, null)
 endfunction
 
 //===========================================================================
@@ -5318,11 +5324,14 @@ function EnumUnitsSelected takes player whichPlayer, boolexpr enumFilter, code e
 endfunction
 
 //===========================================================================
-function GetUnitsInRectMatching takes rect r, boolexpr filter returns group
-    local group g = CreateGroup() // TODO leaks
+function GetUnitsInRectMatching_sub takes group g, rect r, boolexpr filter returns group
     call GroupEnumUnitsInRect(g, r, filter)
     call DestroyBoolExpr(filter)
     return g
+endfunction
+
+function GetUnitsInRectMatching takes rect r, boolexpr filter returns group
+	return GetUnitsInRectMatching_sub(CreateGroup(), r, filter)
 endfunction
 
 //===========================================================================
@@ -5336,19 +5345,25 @@ function GetUnitsInRectOfPlayerFilter takes nothing returns boolean
 endfunction
 
 //===========================================================================
-function GetUnitsInRectOfPlayer takes rect r, player whichPlayer returns group
-    local group g = CreateGroup() // TODO leaks
+function GetUnitsInRectOfPlayer_sub takes group g, rect r, player whichPlayer returns group
     set bj_groupEnumOwningPlayer = whichPlayer
     call GroupEnumUnitsInRect(g, r, filterGetUnitsInRectOfPlayer)
     return g
 endfunction
 
+function GetUnitsInRectOfPlayer takes rect r, player whichPlayer returns group
+    return GetUnitsInRectOfPlayer_sub(CreateGroup(), r, whichPlayer)
+endfunction
+
 //===========================================================================
-function GetUnitsInRangeOfLocMatching takes real radius, location whichLocation, boolexpr filter returns group
-    local group g = CreateGroup() // TODO leaks
+function GetUnitsInRangeOfLocMatching_sub takes group g, real radius, location whichLocation, boolexpr filter returns group
     call GroupEnumUnitsInRangeOfLoc(g, whichLocation, radius, filter)
     call DestroyBoolExpr(filter)
     return g
+endfunction
+
+function GetUnitsInRangeOfLocMatching takes real radius, location whichLocation, boolexpr filter returns group
+    return GetUnitsInRangeOfLocMatching_sub(CreateGroup(), radius, whichLocation, filter)
 endfunction
 
 //===========================================================================
@@ -5362,8 +5377,7 @@ function GetUnitsOfTypeIdAllFilter takes nothing returns boolean
 endfunction
 
 //===========================================================================
-function GetUnitsOfTypeIdAll takes integer unitid returns group
-    local group   result = CreateGroup() // TODO leaks
+function GetUnitsOfTypeIdAll_sub takes group result, integer unitid returns group
     local group   g      = CreateGroup()
     local integer index  = 0
 	
@@ -5382,12 +5396,19 @@ function GetUnitsOfTypeIdAll takes integer unitid returns group
     return result
 endfunction
 
+function GetUnitsOfTypeIdAll takes integer unitid returns group
+    return GetUnitsOfTypeIdAll_sub(CreateGroup(), unitid)
+endfunction
+
 //===========================================================================
-function GetUnitsOfPlayerMatching takes player whichPlayer, boolexpr filter returns group
-    local group g = CreateGroup() // TODO leaks
+function GetUnitsOfPlayerMatching_sub takes group g, player whichPlayer, boolexpr filter returns group
     call GroupEnumUnitsOfPlayer(g, whichPlayer, filter)
     call DestroyBoolExpr(filter)
     return g
+endfunction
+
+function GetUnitsOfPlayerMatching takes player whichPlayer, boolexpr filter returns group
+    return GetUnitsOfPlayerMatching_sub(CreateGroup(), whichPlayer, filter)
 endfunction
 
 //===========================================================================
@@ -5401,26 +5422,35 @@ function GetUnitsOfPlayerAndTypeIdFilter takes nothing returns boolean
 endfunction
 
 //===========================================================================
-function GetUnitsOfPlayerAndTypeId takes player whichPlayer, integer unitid returns group
-    local group g = CreateGroup() // TODO leaks
+function GetUnitsOfPlayerAndTypeId_sub takes group g, player whichPlayer, integer unitid returns group
     set bj_groupEnumTypeId = unitid
     call GroupEnumUnitsOfPlayer(g, whichPlayer, filterGetUnitsOfPlayerAndTypeId)
     return g
 endfunction
 
+function GetUnitsOfPlayerAndTypeId takes player whichPlayer, integer unitid returns group
+    return GetUnitsOfPlayerAndTypeId_sub(CreateGroup(), whichPlayer, unitid)
+endfunction
+
 //===========================================================================
-function GetUnitsSelectedAll takes player whichPlayer returns group
-    local group g = CreateGroup() // TODO leaks
+function GetUnitsSelectedAll_sub takes group g, player whichPlayer returns group
     call SyncSelections()
     call GroupEnumUnitsSelected(g, whichPlayer, null)
     return g
 endfunction
 
+function GetUnitsSelectedAll takes player whichPlayer returns group
+    return GetUnitsSelectedAll_sub(CreateGroup(), whichPlayer)
+endfunction
+
 //===========================================================================
-function GetForceOfPlayer takes player whichPlayer returns force
-    local force f = CreateForce() // TODO leaks
+function GetForceOfPlayer_sub takes force f, player whichPlayer returns force
     call ForceAddPlayer(f, whichPlayer)
     return f
+endfunction
+
+function GetForceOfPlayer takes player whichPlayer returns force
+    return GetForceOfPlayer_sub(CreateForce(), whichPlayer)
 endfunction
 
 //===========================================================================
@@ -5429,8 +5459,7 @@ function GetPlayersAll takes nothing returns force
 endfunction
 
 //===========================================================================
-function GetPlayersByMapControl takes mapcontrol whichControl returns force
-    local force f = CreateForce() // TODO leaks
+function GetPlayersByMapControl_sub takes force f, mapcontrol whichControl returns force
     local integer playerIndex
     local player  indexPlayer
 
@@ -5448,26 +5477,39 @@ function GetPlayersByMapControl takes mapcontrol whichControl returns force
     return f
 endfunction
 
+function GetPlayersByMapControl takes mapcontrol whichControl returns force
+    return GetPlayersByMapControl_sub(CreateForce(), whichControl)
+endfunction
+
 //===========================================================================
-function GetPlayersAllies takes player whichPlayer returns force
-    local force f = CreateForce() // TODO leaks
+function GetPlayersAllies_sub takes force f, player whichPlayer returns force
     call ForceEnumAllies(f, whichPlayer, null)
     return f
 endfunction
 
+function GetPlayersAllies takes player whichPlayer returns force
+    return GetPlayersAllies_sub(CreateForce())
+endfunction
+
 //===========================================================================
-function GetPlayersEnemies takes player whichPlayer returns force
-    local force f = CreateForce() // TODO leaks
+function GetPlayersEnemies_sub takes force f, player whichPlayer returns force
     call ForceEnumEnemies(f, whichPlayer, null)
     return f
 endfunction
 
+function GetPlayersEnemies takes player whichPlayer returns force
+    return GetPlayersEnemies_sub(CreateForce(), whichPlayer)
+endfunction
+
 //===========================================================================
-function GetPlayersMatching takes boolexpr filter returns force
-    local force f = CreateForce() // TODO leaks
+function GetPlayersMatching_sub takes force f, boolexpr filter returns force
     call ForceEnumPlayers(f, filter)
     call DestroyBoolExpr(filter)
     return f
+endfunction
+
+function GetPlayersMatching takes boolexpr filter returns force
+    return GetPlayersMatching_sub(CreateForce(), filter)
 endfunction
 
 //===========================================================================
@@ -5517,9 +5559,7 @@ function GetRandomSubGroupEnum takes nothing returns nothing
 endfunction
 
 //===========================================================================
-function GetRandomSubGroup takes integer count, group sourceGroup returns group
-    local group g = CreateGroup() // TODO leaks
-
+function GetRandomSubGroup_sub takes group g, integer count, group sourceGroup returns group
     set bj_randomSubGroupGroup = g
     set bj_randomSubGroupWant  = count
     set bj_randomSubGroupTotal = CountUnitsInGroup(sourceGroup)
@@ -5531,6 +5571,10 @@ function GetRandomSubGroup takes integer count, group sourceGroup returns group
     set bj_randomSubGroupChance = I2R(bj_randomSubGroupWant) / I2R(bj_randomSubGroupTotal)
     call ForGroup(sourceGroup, function GetRandomSubGroupEnum)
     return g
+endfunction
+
+function GetRandomSubGroup takes integer count, group sourceGroup returns group
+    return GetRandomSubGroup_sub(CreateGroup(), count, sourceGroup)
 endfunction
 
 //===========================================================================
@@ -8718,11 +8762,10 @@ endfunction
 //===========================================================================
 // Replaces a gold mine with a blighted gold mine for the given player.
 //
-function BlightGoldMineForPlayerBJ takes unit goldMine, player whichPlayer returns unit
+function BlightGoldMineForPlayerBJ_sub takes unit newMine, unit goldMine, player whichPlayer returns unit
     local real    mineX
     local real    mineY
     local integer mineGold
-    local unit    newMine // TODO leaks
 
     // Make sure we're replacing a Gold Mine and not some other type of unit.
     if GetUnitTypeId(goldMine) != 'ngol' then
@@ -8739,6 +8782,10 @@ function BlightGoldMineForPlayerBJ takes unit goldMine, player whichPlayer retur
     set newMine = CreateBlightedGoldmine(whichPlayer, mineX, mineY, bj_UNIT_FACING)
     call SetResourceAmount(newMine, mineGold)
     return newMine
+endfunction
+
+function BlightGoldMineForPlayerBJ takes unit goldMine, player whichPlayer returns unit
+    return BlightGoldMineForPlayerBJ_sub(null, goldMine, whichPlayer)
 endfunction
 
 //===========================================================================
@@ -9198,8 +9245,7 @@ function MeleeFindNearestMine takes location src, real range returns unit
 endfunction
 
 //===========================================================================
-function MeleeRandomHeroLoc takes player p, integer id1, integer id2, integer id3, integer id4, location loc returns unit
-    local unit    hero = null // TODO leaks
+function MeleeRandomHeroLoc_sub takes unit hero, player p, integer id1, integer id2, integer id3, integer id4, location loc returns unit
     local integer roll
     local integer pick
     local version v
@@ -9232,6 +9278,10 @@ function MeleeRandomHeroLoc takes player p, integer id1, integer id2, integer id
         call MeleeGrantItemsToHero(hero)
     endif
     return hero
+endfunction
+
+function MeleeRandomHeroLoc takes player p, integer id1, integer id2, integer id3, integer id4, location loc returns unit
+    return MeleeRandomHeroLoc_sub(null, p, id1, id2, id3, id4, loc)
 endfunction
 
 //===========================================================================
@@ -11217,14 +11267,12 @@ endfunction
 //*        item into the unpathable area where nobody can get it...
 //*
 //***************************************************************************
-
-function UnitDropItem takes unit inUnit, integer inItemID returns item
+function UnitDropItem_sub takes item droppedItem, unit inUnit, integer inItemID returns item
     local real x
     local real y
     local real radius = 32
     local real unitX
     local real unitY
-    local item droppedItem // TODO leaks
 
     if (inItemID == -1) then
         return null
@@ -11242,6 +11290,10 @@ function UnitDropItem takes unit inUnit, integer inItemID returns item
     call UpdateStockAvailability(droppedItem)
 
     return droppedItem
+endfunction
+
+function UnitDropItem takes unit inUnit, integer inItemID returns item
+    return UnitDropItem_sub(null, inUnit, inItemID)
 endfunction
 
 //===========================================================================
