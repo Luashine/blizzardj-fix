@@ -4252,7 +4252,8 @@ endfunction
 //===========================================================================
 function IssueHauntOrderAtLocBJ takes unit whichPeon, location loc returns boolean
     local group g = null
-    local unit goldMine = null // TODO leak
+    local unit goldMine = null
+    local boolean result
 
     // Search for a gold mine within a 1-cell radius of the specified location.
     set g = CreateGroup()
@@ -4267,7 +4268,8 @@ function IssueHauntOrderAtLocBJ takes unit whichPeon, location loc returns boole
     endif
 
     // Issue the Haunt Gold Mine order.
-    return IssueTargetOrderById(whichPeon, 'ugol', goldMine)
+    set result = IssueTargetOrderById(whichPeon, 'ugol', goldMine)
+    return result
 endfunction
 
 //===========================================================================
