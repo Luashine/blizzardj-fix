@@ -1313,6 +1313,7 @@ function StartExpansion takes integer qty, integer hall returns boolean
     local integer town
     local unit    peon
     local integer gold_cost
+	local boolean result
 
     set count = TownCount(hall)
     if count >= qty then
@@ -1338,9 +1339,12 @@ function StartExpansion takes integer qty, integer hall returns boolean
 
     set peon = GetExpansionPeon()
     if peon != null then
-        return SetExpansion(peon,hall)
+		set result = SetExpansion(peon,hall)
+		set peon = null
+        return result
     endif
 
+	set peon = null
     return true
 endfunction
 
@@ -2040,6 +2044,8 @@ function MinorCreepAttack takes nothing returns nothing
     call SetAllianceTarget(target)
     call FormGroup(3, true)
     call AttackMoveKillA(target)
+	
+	set target = null
 endfunction
 
 //============================================================================
@@ -2048,6 +2054,8 @@ function MajorCreepAttack takes nothing returns nothing
     call SetAllianceTarget(target)
     call FormGroup(3,true)
     call AttackMoveKillA(target)
+	
+	set target = null
 endfunction
 
 //============================================================================
@@ -2056,6 +2064,8 @@ function CreepAttackEx takes nothing returns nothing
     call SetAllianceTarget(target)
     call FormGroup(3,true)
     call AttackMoveKillA(target)
+
+	set target = null
 endfunction
 
 //============================================================================
@@ -2075,6 +2085,8 @@ function AnyPlayerAttack takes nothing returns nothing
     call SetAllianceTarget(hall)
     call FormGroup(3,true)
     call AttackMoveKillA(hall)
+
+	set hall = null
 endfunction
 
 //============================================================================
@@ -2090,6 +2102,7 @@ function ExpansionAttack takes nothing returns nothing
         endif
     else
         call AttackMoveKillA(creep)
+		set creep = null
     endif
 endfunction
 
@@ -2178,6 +2191,8 @@ function SingleMeleeAttack takes boolean needs_exp, boolean has_siege, boolean m
             call FormGroup(3,true)
             call AttackMoveKillA(common)
             call SetAllianceTarget(null)
+
+			set common = null
             return
         endif
     endif
@@ -2194,6 +2209,8 @@ function SingleMeleeAttack takes boolean needs_exp, boolean has_siege, boolean m
             call AttackMoveKillA(creep)
             call Sleep(20)
             set take_exp = false
+
+			set creep = null
             return
         endif
     endif
@@ -2207,6 +2224,8 @@ function SingleMeleeAttack takes boolean needs_exp, boolean has_siege, boolean m
             call AddSiege()
             call FormGroup(3,true)
             call AttackMoveKillA(mega)
+
+			set mega = null
             return
         endif
     endif
@@ -2236,11 +2255,14 @@ function SingleMeleeAttack takes boolean needs_exp, boolean has_siege, boolean m
             call SetAllianceTarget(hall)
             call FormGroup(3,true)
             call AttackMoveKillA(hall)
+			
+			set hall = null
             return
         endif
 
         set exp_seen = exp_seen + 1
     endif
+	set hall = null
 
     // attack player's main base when siege is available
     //
