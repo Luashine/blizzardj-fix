@@ -4615,7 +4615,7 @@ endfunction
 // This attempts to replace a unit with a new unit type by creating a new
 // unit of the desired type using the old unit's location, facing, etc.
 //
-function ReplaceUnitBJ_sub takes unit whichUnit, integer newUnitId, integer unitStateMethod, unit newUnit returns unit
+function ReplaceUnitBJ_sub takes unit newUnit, unit whichUnit, integer newUnitId, integer unitStateMethod returns unit
     local unit    oldUnit = whichUnit
     local boolean wasHidden
     local integer index
@@ -4706,7 +4706,7 @@ function ReplaceUnitBJ_sub takes unit whichUnit, integer newUnitId, integer unit
 endfunction
 
 function ReplaceUnitBJ takes unit whichUnit, integer newUnitId, integer unitStateMethod returns unit
-    return ReplaceUnitBJ_sub(whichUnit, newUnitId, unitStateMethod, null)
+    return ReplaceUnitBJ_sub(null, whichUnit, newUnitId, unitStateMethod)
 endfunction
 
 //===========================================================================
