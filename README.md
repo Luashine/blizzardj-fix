@@ -4,10 +4,7 @@ Putting on my plumber hat to fix leaks and shiet
 
 Source: original files + paths
 
-Licence: I don't watch TV but must pay for it.
-
-...Whatever license I decide upon later (if I need to) shall retroactively
-apply to my earlier changes (patches) here.
+Licence: I decided upon UNLICENSE for modifications atop the original scripts.
 
 ## Explanation
 
@@ -18,6 +15,11 @@ Further reading:
 
 1. <https://github.com/lep/jassdoc/pull/108>
 2. <https://www.hiveworkshop.com/threads/jass-contest-how-would-you-avoid-local-variable-leaks.374040/>
+
+## Integration notes
+
+1. TODO: must also update the `_balance` editions of the Blizzard.j to incorporate the fixes there.
+2. Pay attention to CRLF/LF yourself
 
 ## Ignored files
 
