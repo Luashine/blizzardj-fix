@@ -3100,6 +3100,7 @@ function RemoveEffectAsyncBJ takes nothing returns nothing
 	
 	call TriggerSleepAction(localTime)
 	call BlzRemoveEffect(localEffect)
+	set localEffect = null
 endfunction
 
 function RemoveEffectAfterTimeBJ takes effect whichEffect, real time returns nothing
